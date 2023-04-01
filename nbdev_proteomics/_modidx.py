@@ -2,8 +2,8 @@
 
 d = { 'settings': { 'branch': 'main',
                 'doc_baseurl': '/nbdev-proteomics',
-                'doc_host': 'https://mtinti\n\nrequirements = fastcore pandas.github.io',
-                'git_url': 'https://github.com/mtinti\n\nrequirements = fastcore pandas/nbdev-proteomics',
+                'doc_host': 'https://mtinti.github.io',
+                'git_url': 'https://github.com/mtinti/nbdev-proteomics',
                 'lib_path': 'nbdev_proteomics'},
   'syms': { 'nbdev_proteomics.core': { 'nbdev_proteomics.core.DatasetAnalysis': ('core.html#datasetanalysis', 'nbdev_proteomics/core.py'),
                                        'nbdev_proteomics.core.SpectronautProcessor': ( 'core.html#spectronautprocessor',

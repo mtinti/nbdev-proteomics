@@ -3,11 +3,7 @@ project:
 
 website:
   title: "nbdev-proteomics"
-  site-url: "https://mtinti
-
-requirements = fastcore pandas.github.io/nbdev-proteomics"
+  site-url: "https://mtinti.github.io/nbdev-proteomics"
   description: "process proteomic quantification"
   repo-branch: main
-  repo-url: "https://github.com/mtinti
-
-requirements = fastcore pandas/nbdev-proteomics"
+  repo-url: "https://github.com/mtinti/nbdev-proteomics"
