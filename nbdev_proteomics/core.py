@@ -15,50 +15,51 @@ class SpectronautProcessor(DatasetAnalysis):
         self.filename = file_name
         self.column_mapping = self.parse_column_mapping(column_mapping)
         
-        
+    #prepare the dataset for analysis    
     def filter_protein_quantification(self, df):
-        """
-        This function prpare the Spectronaut oupt for 
-        analysis. Filters out low quality hits and return
-        a dataframe
-        """
         quant_cols = [n for n in df.columns if 'PG.Quantity' in n]
-        
-        #grab the columns IsSingleHit
-        mask = df[[n.replace('PG.Quantity','PG.IsSingleHit') for n in quant_cols]]
-        #change the names to the 
-        #quant columns to apply a mask
+
+        # Create a mask DataFrame based on IsSingleHit columns
+        mask = df[[n.replace('PG.Quantity', 'PG.IsSingleHit') for n in quant_cols]]
         mask.columns = quant_cols
-            
-        #apply the conditions for mask
-        #if the protein has been filtered
-        mask=mask.replace('Filtered', True)
-        
-        #if it's not a single hit we leave it alone
-        mask=mask.replace('False', False)
-        mask=mask.replace('FALSE', False)
-        
-        #if the protein is a single hit 
-        mask=mask.replace('True', True)
-        mask=mask.replace('TRUE', True)
-        
-        #finally get the data dataframe 
-        #and apply the task
+
+        # Replace strings with their corresponding boolean values
+        replacements = {'Filtered': True, 'False': False, 
+                        'True': True, 'FALSE': False, 'TRUE': True}
+        mask = mask.replace(replacements)
+
+        # Get the data DataFrame with only the quantification columns
         selection = df[quant_cols]
-        selection = selection.mask(mask)
-        return selection
+
+        # Apply the mask to the data DataFrame
+        filtered_selection = selection.mask(mask)
+
+        return filtered_selection
     
+    #this function create from a table of:
+    #old_column, condition, replica
+    #a mepping dataframe. the condition and replica
+    #are used to name the new column
     def parse_column_mapping(self, mapping_file):
-        mapping_df = pd.read_csv(mapping_file,sep='\t')
-        assert mapping_df.shape[1]==3
-        #user might have used different columns sets
-        #we make sure that we use the quntification
-        #columns
-        mapping_df['col_name']=[n.replace('.IsSingleHit','.Quantity') for n in mapping_df['col_name']]
-        mapping_df['new_col']=mapping_df['condition']+'.'+mapping_df['replica'].astype(str)
+        # Read the mapping file into a DataFrame
+        mapping_df = pd.read_csv(mapping_file, sep='\t')
+
+        # Assert that the DataFrame has exactly 3 columns
+        assert mapping_df.shape[1] == 3
+
+        # Replace '.IsSingleHit' with '.Quantity' in the 'col_name' column
+        mapping_df['col_name'] = mapping_df['col_name'].str.replace('.IsSingleHit', '.Quantity')
+
+        # Create a new column 'new_col' with the format 'condition.replica'
+        mapping_df['new_col'] = mapping_df['condition'] + '.' + mapping_df['replica'].astype(str)
+
+        # Create a dictionary mapping the original column names to the new column names
         mapping_dict = dict(zip(mapping_df['col_name'], mapping_df['new_col']))
+
         return mapping_dict
-        
+    
+    #this function apply the logic of getting the dataframe
+    #for quantification analysis
     def process(self):
         df = pd.read_csv(self.filename, sep="\t")
         filtered_quantification = self.filter_protein_quantification(df)
