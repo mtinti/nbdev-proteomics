@@ -3,6 +3,16 @@
 # %% auto 0
 __all__ = ['normalize_dataframe', 'plot_mds_columns', 'plot_pca_columns', 'top_n_rows_driving_columns']
 
+# %% ../nbs/01_dim_red.ipynb 3
+from nbdev.showdoc import *
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.manifold import MDS
+from sklearn.preprocessing import StandardScaler
+from adjustText import adjust_text
+from sklearn.decomposition import PCA
+
 # %% ../nbs/01_dim_red.ipynb 4
 def normalize_dataframe(in_df):
     sc = StandardScaler()

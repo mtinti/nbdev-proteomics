@@ -1,0 +1,29 @@
+name: work3
+channels:
+  - r
+  - anaconda
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - bioconductor-limma
+  - bioconductor-sva
+  - bioconductor-hybridmtest
+  - r-missforest
+  - r-doparallel
+  - r-nbclust
+  - ipykernel
+  - matplotlib
+  - scikit-learn
+  - adjusttext
+  - rpy2
+  - jupyterlab
+  - scipy
+  - missingno
+  - biopython
+  - seaborn
+  - tqdm
+  - shap
+  - nbdev
+  - ipywidgets
+prefix: /Users/MTinti/miniconda3/envs/work3

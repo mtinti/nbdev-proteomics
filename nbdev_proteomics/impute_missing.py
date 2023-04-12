@@ -3,14 +3,26 @@
 # %% auto 0
 __all__ = ['impute_proteomics_data']
 
+# %% ../nbs/02_impute_missing.ipynb 3
+from nbdev.showdoc import *
+import numpy as np
+import pandas as pd
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+from scipy.stats import truncnorm
+
 # %% ../nbs/02_impute_missing.ipynb 4
 def impute_proteomics_data(df, conditions):
     
     def impute_detection_limit(condition_df, detection_limit):
-        std_dev = detection_limit * 0.1
-        imputed_df = condition_df.applymap(lambda x: np.random.normal(detection_limit, std_dev) if pd.isnull(x) else x)
-        return imputed_df
+        std_dev = detection_limit * 0.2
 
+        def generate_positive_random_value(mean, std_dev):
+            a, b = 0, np.inf
+            return truncnorm.rvs(a=(a - mean) / std_dev, b=(b - mean) / std_dev, loc=mean, scale=std_dev)
+
+        imputed_df = condition_df.applymap(lambda x: generate_positive_random_value(detection_limit, std_dev) if pd.isnull(x) else x)
+        return imputed_df
 
     def compute_detection_limit(condition_df):
         smallest_values = []
@@ -20,6 +32,7 @@ def impute_proteomics_data(df, conditions):
             smallest_values.extend(column_non_zero.nsmallest(10).tolist())
 
         detection_limit = np.median(smallest_values)
+        print('detection_limit',detection_limit)
         return detection_limit
 
     unique_conditions = set(conditions)
@@ -42,7 +55,12 @@ def impute_proteomics_data(df, conditions):
         
         #print(non_missing_rows)
         imp_mean = IterativeImputer(random_state=0, imputation_order='roman')
-        imputed_non_missing_rows = pd.DataFrame(imp_mean.fit_transform(non_missing_rows),
+        
+        imputed_data = imp_mean.fit_transform(non_missing_rows)
+        imputed_data = np.maximum(imputed_data, detection_limit)
+        #imputed_data = np.maximum(imputed_data, detection_limit * 0.1)
+        
+        imputed_non_missing_rows = pd.DataFrame(imputed_data,
                                                 index=non_missing_rows.index,columns=non_missing_rows.columns)
 
         combined_df = pd.concat([imputed_missing_rows, imputed_non_missing_rows]).sort_index()
