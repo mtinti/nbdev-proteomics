@@ -3,14 +3,14 @@
 # %% auto 0
 __all__ = ['normalize_dataframe', 'plot_mds_columns', 'plot_pca_columns', 'top_n_rows_driving_columns']
 
-# %% ../nbs/01_dim_red.ipynb 3
+# %% ../nbs/01_dim_red.ipynb 4
 def normalize_dataframe(in_df):
     sc = StandardScaler()
     return pd.DataFrame(sc.fit_transform(in_df),
                         index=in_df.index, 
                         columns=in_df.columns)
 
-# %% ../nbs/01_dim_red.ipynb 4
+# %% ../nbs/01_dim_red.ipynb 5
 def plot_mds_columns(in_df, colors, color_to_label):
     # Normalize the input DataFrame
     normalized_df = normalize_dataframe(in_df)
@@ -53,7 +53,7 @@ def plot_mds_columns(in_df, colors, color_to_label):
     # Show the plot
     plt.show()
 
-# %% ../nbs/01_dim_red.ipynb 6
+# %% ../nbs/01_dim_red.ipynb 7
 def plot_pca_columns(in_df, colors, color_to_label):
     # Normalize the input DataFrame
     normalized_df = normalize_dataframe(in_df)
@@ -97,7 +97,7 @@ def plot_pca_columns(in_df, colors, color_to_label):
     plt.show()
 
 
-# %% ../nbs/01_dim_red.ipynb 8
+# %% ../nbs/01_dim_red.ipynb 9
 def top_n_rows_driving_columns(df, column_1, column_2, component=0, n=5, direction='togheter'):
     # Normalize the DataFrame
     normalized_df = normalize_dataframe(df)

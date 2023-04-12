@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['impute_proteomics_data']
 
-# %% ../nbs/02_impute_missing.ipynb 3
+# %% ../nbs/02_impute_missing.ipynb 4
 def impute_proteomics_data(df, conditions):
     
     def impute_detection_limit(condition_df, detection_limit):

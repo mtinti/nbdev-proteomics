@@ -3,7 +3,16 @@
 # %% auto 0
 __all__ = ['DatasetViz', 'norm_loading', 'DatasetAnalysis', 'SpectronautProcessor', 'DIAnnProcessor']
 
-# %% ../nbs/00_core.ipynb 4
+# %% ../nbs/00_core.ipynb 3
+from nbdev.showdoc import *
+import pandas as pd
+import numpy as np
+import os
+import missingno as msno
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# %% ../nbs/00_core.ipynb 5
 class DatasetViz():
     """Class to visualize a data frame"""
     def __init__(self, df='', palette = False):
@@ -68,7 +77,7 @@ class DatasetViz():
         
         
 
-# %% ../nbs/00_core.ipynb 5
+# %% ../nbs/00_core.ipynb 6
 def norm_loading(df):
     col_sum = df.median(axis=0)
     print(col_sum)
@@ -79,7 +88,7 @@ def norm_loading(df):
     data_norm = df.multiply(norm_facs, axis=1)
     return data_norm 
 
-# %% ../nbs/00_core.ipynb 6
+# %% ../nbs/00_core.ipynb 7
 class DatasetAnalysis():
     """Class to store common functions
     for the analysis of proteomics data"""
@@ -116,7 +125,7 @@ class DatasetAnalysis():
    
     
 
-# %% ../nbs/00_core.ipynb 7
+# %% ../nbs/00_core.ipynb 8
 class SpectronautProcessor(DatasetAnalysis):
     """Class to make a Spectronaut output
     ready for quntification"""
@@ -157,7 +166,7 @@ class SpectronautProcessor(DatasetAnalysis):
         return filtered_quantification
 
 
-# %% ../nbs/00_core.ipynb 10
+# %% ../nbs/00_core.ipynb 11
 class DIAnnProcessor(DatasetAnalysis):
     """Class to make a DIA-NN output
     ready for quntification"""
