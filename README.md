@@ -13,10 +13,4 @@ pip install nbdev_proteomics
 
 ## How to use
 
-Fill me in please! Don’t forget code examples:
-
-``` python
-1+1
-```
-
-    2
+Let’s start by uploading a dataset from a DIA-NN analysis
