@@ -14,3 +14,7 @@ pip install nbdev_proteomics
 ## How to use
 
 Let’s start by uploading a dataset from a DIA-NN analysis
+
+``` python
+#normalize_dataframe
+```
