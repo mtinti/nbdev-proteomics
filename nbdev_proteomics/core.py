@@ -126,6 +126,7 @@ class SpectronautProcessor(DatasetAnalysis):
         
     #prepare the dataset for analysis    
     def filter_protein_quantification(self, df):
+        print('use spec')
         quant_cols = [n for n in df.columns if 'PG.Quantity' in n]
 
         # Create a mask DataFrame based on IsSingleHit columns
@@ -166,6 +167,7 @@ class DIAnnProcessor(DatasetAnalysis):
         self.peptides_count = peptides_count
         
     def filter_protein_quantification(self, df):
+        print('use dia-nn')
         #we use only the protein identified at least with 2
         #peptides
         df_peptide = pd.read_csv(self.peptides_count, sep='\t')
