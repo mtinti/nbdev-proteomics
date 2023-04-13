@@ -198,6 +198,22 @@ filtered_quantification.head()
 <p>5 rows × 33 columns</p>
 </div>
 
+``` python
+colors = ['r']*filtered_quantification.shape[1]
+color_to_label = {'r': 'exp'}
+plot_pca_columns(np.log2(filtered_quantification).dropna(), colors,color_to_label, figsize=(8,8))
+```
+
+![](index_files/figure-commonmark/cell-3-output-1.png)
+
+``` python
+colors = ['r']*filtered_quantification.shape[1]
+color_to_label = {'r': 'exp'}
+plot_mds_columns(np.log2(filtered_quantification).dropna(), colors, color_to_label, figsize=(8,8))
+```
+
+![](index_files/figure-commonmark/cell-4-output-1.png)
+
 ## exctract a subset of the dataframe
 
 ``` python
@@ -557,8 +573,8 @@ dataset_viz.analyse_missing_values(figsize=(8,4))
 dataset_viz.analyse_values_distribution(figsize=(8,4))
 ```
 
-    detection_limit 128099.10559899165
-    detection_limit 116342.31145379972
+    fill na with detection_limit: 116342.31145379972 5.065737687979267 Index(['WT_1.1', 'WT_1.2', 'WT_1.3'], dtype='object')
+    fill na with detection_limit: 128099.10559899165 5.107546097466946 Index(['MUT3_1.1', 'MUT3_1.2', 'MUT3_1.3'], dtype='object')
 
 ![](index_files/figure-commonmark/cell-11-output-2.png)
 
@@ -612,12 +628,12 @@ df_norm_load_imputed.describe()
     </tr>
     <tr>
       <th>mean</th>
-      <td>3.500380e+07</td>
-      <td>3.428574e+07</td>
-      <td>3.435549e+07</td>
-      <td>3.223563e+07</td>
-      <td>3.174939e+07</td>
-      <td>3.236607e+07</td>
+      <td>3.500385e+07</td>
+      <td>3.428577e+07</td>
+      <td>3.435545e+07</td>
+      <td>3.223566e+07</td>
+      <td>3.174944e+07</td>
+      <td>3.236610e+07</td>
     </tr>
     <tr>
       <th>std</th>
@@ -630,12 +646,12 @@ df_norm_load_imputed.describe()
     </tr>
     <tr>
       <th>min</th>
-      <td>5.913383e+04</td>
-      <td>6.216549e+04</td>
-      <td>5.988581e+04</td>
-      <td>4.976223e+04</td>
-      <td>6.408844e+04</td>
-      <td>4.020909e+04</td>
+      <td>5.828539e+04</td>
+      <td>7.446140e+04</td>
+      <td>6.129801e+04</td>
+      <td>6.644884e+04</td>
+      <td>5.337315e+04</td>
+      <td>8.427987e+04</td>
     </tr>
     <tr>
       <th>25%</th>
@@ -737,30 +753,30 @@ imputed_selection_normed.describe()
     </tr>
     <tr>
       <th>mean</th>
-      <td>22.402910</td>
-      <td>22.381822</td>
-      <td>22.378598</td>
-      <td>22.359299</td>
-      <td>22.384623</td>
-      <td>22.370517</td>
+      <td>22.403594</td>
+      <td>22.382280</td>
+      <td>22.377914</td>
+      <td>22.359599</td>
+      <td>22.385108</td>
+      <td>22.371003</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>2.263382</td>
-      <td>2.253849</td>
-      <td>2.245239</td>
-      <td>2.250515</td>
-      <td>2.204174</td>
-      <td>2.243815</td>
+      <td>2.261674</td>
+      <td>2.252626</td>
+      <td>2.247010</td>
+      <td>2.249750</td>
+      <td>2.203008</td>
+      <td>2.242486</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>15.851696</td>
-      <td>15.923826</td>
-      <td>15.869926</td>
-      <td>15.602764</td>
-      <td>15.967776</td>
-      <td>15.295234</td>
+      <td>15.830847</td>
+      <td>16.184205</td>
+      <td>15.903553</td>
+      <td>16.019956</td>
+      <td>15.703827</td>
+      <td>16.362901</td>
     </tr>
     <tr>
       <th>25%</th>
@@ -835,9 +851,9 @@ imputed_selection_normed.head()
   <tbody>
     <tr>
       <th>GFP.BLA</th>
-      <td>16.386877</td>
-      <td>16.484142</td>
-      <td>16.785940</td>
+      <td>17.350618</td>
+      <td>16.877316</td>
+      <td>17.281742</td>
       <td>23.267795</td>
       <td>23.349905</td>
       <td>23.247921</td>
@@ -921,19 +937,19 @@ head(results)
 ```
 
                                                     logFC  AveExpr          t
-    GFP.BLA                                    6.73622086 19.92043 62.2075774
-    Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1 -0.16792710 21.31811 -2.1048474
-    Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1 -0.10325758 24.90728 -2.3400088
-    Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1 -0.02614141 22.21472 -0.6919297
-    Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1 -0.23478582 24.84318 -1.6220588
-    Tb05.5K5.150:mRNA-p1;Tb927.5.4500:mRNA-p1 -0.05630553 26.25538 -0.7968049
+    GFP.BLA                                    6.11864849 20.22922 47.3293349
+    Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1 -0.16792710 21.31811 -2.1050623
+    Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1 -0.10325758 24.90728 -2.3404239
+    Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1 -0.02614141 22.21472 -0.6920798
+    Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1 -0.23478582 24.84318 -1.6221870
+    Tb05.5K5.150:mRNA-p1;Tb927.5.4500:mRNA-p1 -0.05630553 26.25538 -0.7968936
                                                    P.Value    adj.P.Val         B
-    GFP.BLA                                   1.527801e-09 9.538062e-06 10.889328
-    Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1 8.070629e-02 2.249328e-01 -5.509200
-    Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1 5.854458e-02 1.861914e-01 -5.178722
-    Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1 5.152633e-01 6.808018e-01 -7.164661
-    Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1 1.567349e-01 3.296820e-01 -6.165897
-    Tb05.5K5.150:mRNA-p1;Tb927.5.4500:mRNA-p1 4.564103e-01 6.363603e-01 -7.081548
+    GFP.BLA                                   7.631331e-09 0.0000150629 10.199640
+    Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1 8.067602e-02 0.2250493179 -5.509594
+    Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1 5.850568e-02 0.1864476665 -5.178813
+    Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1 5.151720e-01 0.6812580102 -7.165282
+    Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1 1.567006e-01 0.3291661121 -6.166449
+    Tb05.5K5.150:mRNA-p1;Tb927.5.4500:mRNA-p1 4.563586e-01 0.6366584845 -7.082207
 
 ``` python
 results
@@ -968,48 +984,48 @@ results
   <tbody>
     <tr>
       <th>GFP.BLA</th>
-      <td>6.736221</td>
-      <td>19.920430</td>
-      <td>62.207577</td>
-      <td>1.527801e-09</td>
-      <td>0.000010</td>
-      <td>10.889328</td>
+      <td>6.118648</td>
+      <td>20.229216</td>
+      <td>47.329335</td>
+      <td>7.631331e-09</td>
+      <td>0.000015</td>
+      <td>10.199640</td>
     </tr>
     <tr>
       <th>Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1</th>
       <td>-0.167927</td>
       <td>21.318110</td>
-      <td>-2.104847</td>
-      <td>8.070629e-02</td>
-      <td>0.224933</td>
-      <td>-5.509200</td>
+      <td>-2.105062</td>
+      <td>8.067602e-02</td>
+      <td>0.225049</td>
+      <td>-5.509594</td>
     </tr>
     <tr>
       <th>Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1</th>
       <td>-0.103258</td>
       <td>24.907278</td>
-      <td>-2.340009</td>
-      <td>5.854458e-02</td>
-      <td>0.186191</td>
-      <td>-5.178722</td>
+      <td>-2.340424</td>
+      <td>5.850568e-02</td>
+      <td>0.186448</td>
+      <td>-5.178813</td>
     </tr>
     <tr>
       <th>Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1</th>
       <td>-0.026141</td>
       <td>22.214719</td>
-      <td>-0.691930</td>
-      <td>5.152633e-01</td>
-      <td>0.680802</td>
-      <td>-7.164661</td>
+      <td>-0.692080</td>
+      <td>5.151720e-01</td>
+      <td>0.681258</td>
+      <td>-7.165282</td>
     </tr>
     <tr>
       <th>Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1</th>
       <td>-0.234786</td>
       <td>24.843179</td>
-      <td>-1.622059</td>
-      <td>1.567349e-01</td>
-      <td>0.329682</td>
-      <td>-6.165897</td>
+      <td>-1.622187</td>
+      <td>1.567006e-01</td>
+      <td>0.329166</td>
+      <td>-6.166449</td>
     </tr>
     <tr>
       <th>...</th>
@@ -1024,46 +1040,46 @@ results
       <th>Tb927.9.9870:mRNA-p1</th>
       <td>0.021158</td>
       <td>23.977410</td>
-      <td>0.504944</td>
-      <td>6.318923e-01</td>
-      <td>0.765852</td>
-      <td>-7.287425</td>
+      <td>0.505039</td>
+      <td>6.318267e-01</td>
+      <td>0.766390</td>
+      <td>-7.288104</td>
     </tr>
     <tr>
       <th>Tb927.9.9940:mRNA-p1</th>
       <td>0.110974</td>
       <td>26.507374</td>
-      <td>2.624737</td>
-      <td>3.994534e-02</td>
-      <td>0.154894</td>
-      <td>-4.777390</td>
+      <td>2.625228</td>
+      <td>3.991415e-02</td>
+      <td>0.154869</td>
+      <td>-4.777352</td>
     </tr>
     <tr>
       <th>Tb927.9.9950:mRNA-p1</th>
       <td>0.086074</td>
       <td>19.670132</td>
-      <td>0.734144</td>
-      <td>4.909841e-01</td>
-      <td>0.662749</td>
-      <td>-7.132375</td>
+      <td>0.734206</td>
+      <td>4.909454e-01</td>
+      <td>0.663127</td>
+      <td>-7.133060</td>
     </tr>
     <tr>
       <th>Tb927.9.9960:mRNA-p1</th>
       <td>-0.265460</td>
       <td>21.796494</td>
-      <td>-6.329124</td>
-      <td>7.755605e-04</td>
-      <td>0.022654</td>
-      <td>-0.429035</td>
+      <td>-6.330320</td>
+      <td>7.743785e-04</td>
+      <td>0.022843</td>
+      <td>-0.428122</td>
     </tr>
     <tr>
       <th>Tb927.9.9970:mRNA-p1</th>
       <td>-0.037307</td>
       <td>21.473382</td>
-      <td>-0.671593</td>
-      <td>5.272387e-01</td>
-      <td>0.689763</td>
-      <td>-7.179635</td>
+      <td>-0.671685</td>
+      <td>5.271806e-01</td>
+      <td>0.690266</td>
+      <td>-7.180301</td>
     </tr>
   </tbody>
 </table>
@@ -1071,65 +1087,11 @@ results
 </div>
 
 ``` python
-import matplotlib.pyplot as plt
-import numpy as np
-
-def plot_volcano_ma(df, title, protein_indices=None, protein_ids=None, protein_colors=None):
-    if protein_indices is None:
-        protein_indices = []
-
-    if protein_ids is None:
-        protein_ids = []
-
-    if protein_colors is None:
-        protein_colors = ['r'] * len(protein_indices)
-
-    df['log10pval'] = -np.log10(df['P.Value'])
-    df['log10adjpval'] = -np.log10(df['adj.P.Val'])
-
-    fig, axes = plt.subplots(figsize=(14, 4), ncols=2, nrows=1)
-
-    # Volcano plot
-    ax = axes[0]
-    df.plot(x='logFC', y='log10adjpval', kind='scatter', s=5, alpha=0.1, ax=ax, c='black')
-
-    # Add lines
-    pval_threshold = -np.log10(0.05)
-    ax.axhline(y=pval_threshold, color='r', linestyle='--')
-    ax.axvline(x=-1, color='g', linestyle='--')
-    ax.axvline(x=1, color='g', linestyle='--')
-
-    for index, protein_id, color in zip(protein_indices, protein_ids, protein_colors):
-        df.loc[[index]].plot(x='logFC', y='log10adjpval', kind='scatter', s=20, alpha=1, ax=ax, c=color)
-        ax.text(df.loc[index]['logFC'], df.loc[index]['log10adjpval'], protein_id, c=color)
-
-    ax.set_title('Volcano')
-
-    # MA plot
-    ax = axes[1]
-    df.plot(x='AveExpr', y='logFC', kind='scatter', s=5, alpha=0.1, ax=ax, c='black')
-
-    for index, protein_id, color in zip(protein_indices, protein_ids, protein_colors):
-        df.loc[[index]].plot(x='AveExpr', y='logFC', kind='scatter', s=20, alpha=1, ax=ax, c=color)
-        ax.text(df.loc[index]['AveExpr'], df.loc[index]['logFC'], protein_id, c=color, fontsize=10)
-
-    ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-    ax.set_title('MA')
-    plt.suptitle(title)
-    plt.show()
-
-    df['P.Value'].plot(kind='hist', bins=100)
-    plt.show()
-
-
-# Usage example:
 plot_volcano_ma(results, "comparison WT 113", 
                 protein_indices=['GFP.BLA','Tb427.BES40.22'], 
                 protein_ids=['BLA','BES'], protein_colors=['b','r'])
 ```
 
-    No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+![](index_files/figure-commonmark/cell-22-output-1.png)
 
 ![](index_files/figure-commonmark/cell-22-output-2.png)
-
-![](index_files/figure-commonmark/cell-22-output-3.png)

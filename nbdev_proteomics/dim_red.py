@@ -21,7 +21,7 @@ def normalize_dataframe(in_df):
                         columns=in_df.columns)
 
 # %% ../nbs/01_dim_red.ipynb 5
-def plot_mds_columns(in_df, colors, color_to_label):
+def plot_mds_columns(in_df, colors, color_to_label, figsize=(4,4), annotate=True,adjust=True):
     # Normalize the input DataFrame
     normalized_df = normalize_dataframe(in_df)
 
@@ -30,19 +30,21 @@ def plot_mds_columns(in_df, colors, color_to_label):
     mds_transformed_columns = mds.fit_transform(normalized_df.T)
 
     # Create a scatter plot of the MDS-transformed column coordinates
-    fig, ax = plt.subplots(figsize=(4, 4))
+    fig, ax = plt.subplots(figsize=figsize)
     for i, color in enumerate(colors):
         ax.scatter(mds_transformed_columns[i, 0], mds_transformed_columns[i, 1],
                    alpha=0.8, c=color, marker='D')
 
-    # Add column labels
-    texts = []
-    for i, column_name in enumerate(in_df.columns):
-        texts.append(ax.text(mds_transformed_columns[i, 0], mds_transformed_columns[i, 1], 
-                             column_name, fontsize=12, color='darkslategray'))
-
-    # Adjust the text labels to avoid overlaps
-    adjust_text(texts, arrowprops=dict(arrowstyle='->', color='red'))
+    if annotate:
+        # Add column labels
+        texts = []
+        for i, column_name in enumerate(in_df.columns):
+            texts.append(ax.text(mds_transformed_columns[i, 0], mds_transformed_columns[i, 1], 
+                                 column_name, fontsize=12, color='darkslategray'))
+        
+        if adjust:
+            # Adjust the text labels to avoid overlaps
+            adjust_text(texts, arrowprops=dict(arrowstyle='->', color='red'))
 
     # Create legend
     legend_elements = [plt.Line2D([0], [0], linestyle='', marker='D', color=color, label=label, markersize=8)
@@ -64,7 +66,7 @@ def plot_mds_columns(in_df, colors, color_to_label):
     plt.show()
 
 # %% ../nbs/01_dim_red.ipynb 7
-def plot_pca_columns(in_df, colors, color_to_label):
+def plot_pca_columns(in_df, colors, color_to_label, figsize=(4,4),annotate=True,adjust=True):
     # Normalize the input DataFrame
     normalized_df = normalize_dataframe(in_df)
 
@@ -73,19 +75,21 @@ def plot_pca_columns(in_df, colors, color_to_label):
     pca_transformed_columns = pca.fit_transform(normalized_df.T)
 
     # Create a scatter plot of the PCA-transformed column coordinates
-    fig, ax = plt.subplots(figsize=(4, 4))
+    fig, ax = plt.subplots(figsize=figsize)
     for i, color in enumerate(colors):
         ax.scatter(pca_transformed_columns[i, 0], pca_transformed_columns[i, 1],
                    alpha=0.8, c=color, marker='D')
 
-    # Add column labels
-    texts = []
-    for i, column_name in enumerate(in_df.columns):
-        texts.append(ax.text(pca_transformed_columns[i, 0], pca_transformed_columns[i, 1], 
-                             column_name, fontsize=12, color='darkslategray'))
+    if annotate:
+        # Add column labels
+        texts = []
+        for i, column_name in enumerate(in_df.columns):
+            texts.append(ax.text(pca_transformed_columns[i, 0], pca_transformed_columns[i, 1], 
+                                 column_name, fontsize=12, color='darkslategray'))
 
-    # Adjust the text labels to avoid overlaps
-    adjust_text(texts, arrowprops=dict(arrowstyle='->', color='red'))
+        if adjust:
+            # Adjust the text labels to avoid overlaps
+            adjust_text(texts, arrowprops=dict(arrowstyle='->', color='red'))
 
     # Create legend
     legend_elements = [plt.Line2D([0], [0], linestyle='', marker='D', color=color, label=label, markersize=8)

@@ -32,7 +32,7 @@ def impute_proteomics_data(df, conditions):
             smallest_values.extend(column_non_zero.nsmallest(10).tolist())
 
         detection_limit = np.median(smallest_values)
-        print('detection_limit',detection_limit)
+        print('fill na with detection_limit:', detection_limit, np.log10(detection_limit),condition_df.columns)
         return detection_limit
 
     unique_conditions = set(conditions)
@@ -61,7 +61,8 @@ def impute_proteomics_data(df, conditions):
         #imputed_data = np.maximum(imputed_data, detection_limit * 0.1)
         
         imputed_non_missing_rows = pd.DataFrame(imputed_data,
-                                                index=non_missing_rows.index,columns=non_missing_rows.columns)
+                                                index=non_missing_rows.index,
+                                                columns=non_missing_rows.columns)
 
         combined_df = pd.concat([imputed_missing_rows, imputed_non_missing_rows]).sort_index()
         imputed_dfs.append(combined_df)
