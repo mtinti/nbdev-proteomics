@@ -567,8 +567,14 @@ df_norm_load.describe()
 </div>
 
 ``` python
-df_norm_load_imputed = impute_proteomics_data(df_norm_load, ['A','A','A','B','B','B'])
+```
+
+    (152, 260)
+
+``` python
+df_norm_load_imputed, detection_limit_imputed_indices, iterative_imputer_imputed_indices = impute_proteomics_data(df_norm_load, ['A','A','A','B','B','B'])
 dataset_viz = DatasetViz(df = df_norm_load_imputed,palette = ['r']*3+['b']*3)
+print(len(detection_limit_imputed_indices),len(iterative_imputer_imputed_indices))
 dataset_viz.analyse_missing_values(figsize=(8,4))
 dataset_viz.analyse_values_distribution(figsize=(8,4))
 ```
@@ -576,15 +582,15 @@ dataset_viz.analyse_values_distribution(figsize=(8,4))
     fill na with detection_limit: 116342.31145379972 5.065737687979267 Index(['WT_1.1', 'WT_1.2', 'WT_1.3'], dtype='object')
     fill na with detection_limit: 128099.10559899165 5.107546097466946 Index(['MUT3_1.1', 'MUT3_1.2', 'MUT3_1.3'], dtype='object')
 
-![](index_files/figure-commonmark/cell-11-output-2.png)
+![](index_files/figure-commonmark/cell-14-output-2.png)
 
-![](index_files/figure-commonmark/cell-11-output-3.png)
+![](index_files/figure-commonmark/cell-14-output-3.png)
 
-![](index_files/figure-commonmark/cell-11-output-4.png)
+![](index_files/figure-commonmark/cell-14-output-4.png)
 
-![](index_files/figure-commonmark/cell-11-output-5.png)
+![](index_files/figure-commonmark/cell-14-output-5.png)
 
-![](index_files/figure-commonmark/cell-11-output-6.png)
+![](index_files/figure-commonmark/cell-14-output-6.png)
 
 ``` python
 df_norm_load_imputed.describe()
@@ -703,13 +709,13 @@ color_to_label = {'r': 'WT', 'b': 'MUT'}
 plot_mds_columns(imputed_selection_normed, colors, color_to_label)
 ```
 
-![](index_files/figure-commonmark/cell-15-output-1.png)
+![](index_files/figure-commonmark/cell-18-output-1.png)
 
 ``` python
 plot_pca_columns(imputed_selection_normed, colors, color_to_label)
 ```
 
-![](index_files/figure-commonmark/cell-16-output-1.png)
+![](index_files/figure-commonmark/cell-19-output-1.png)
 
 ``` python
 imputed_selection_normed.describe()
@@ -1092,6 +1098,6 @@ plot_volcano_ma(results, "comparison WT 113",
                 protein_ids=['BLA','BES'], protein_colors=['b','r'])
 ```
 
-![](index_files/figure-commonmark/cell-22-output-1.png)
+![](index_files/figure-commonmark/cell-25-output-1.png)
 
-![](index_files/figure-commonmark/cell-22-output-2.png)
+![](index_files/figure-commonmark/cell-25-output-2.png)

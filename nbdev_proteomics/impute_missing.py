@@ -13,7 +13,6 @@ from scipy.stats import truncnorm
 
 # %% ../nbs/02_impute_missing.ipynb 4
 def impute_proteomics_data(df, conditions):
-    
     def impute_detection_limit(condition_df, detection_limit):
         std_dev = detection_limit * 0.2
 
@@ -32,11 +31,14 @@ def impute_proteomics_data(df, conditions):
             smallest_values.extend(column_non_zero.nsmallest(10).tolist())
 
         detection_limit = np.median(smallest_values)
-        print('fill na with detection_limit:', detection_limit, np.log10(detection_limit),condition_df.columns)
+        print('fill na with detection_limit:', detection_limit, np.log10(detection_limit), condition_df.columns)
         return detection_limit
 
     unique_conditions = set(conditions)
     imputed_dfs = []
+
+    detection_limit_imputed_indices = []
+    iterative_imputer_imputed_indices = []
 
     for condition in unique_conditions:
         condition_indices = [i for i, c in enumerate(conditions) if c == condition]
@@ -50,16 +52,15 @@ def impute_proteomics_data(df, conditions):
 
         if not missing_rows.empty:
             imputed_missing_rows = impute_detection_limit(missing_rows, detection_limit)
+            detection_limit_imputed_indices.extend(imputed_missing_rows.index.tolist())
         else:
             imputed_missing_rows = missing_rows
-        
-        #print(non_missing_rows)
+
         imp_mean = IterativeImputer(random_state=0, imputation_order='roman')
-        
+
         imputed_data = imp_mean.fit_transform(non_missing_rows)
         imputed_data = np.maximum(imputed_data, detection_limit)
-        #imputed_data = np.maximum(imputed_data, detection_limit * 0.1)
-        
+
         imputed_non_missing_rows = pd.DataFrame(imputed_data,
                                                 index=non_missing_rows.index,
                                                 columns=non_missing_rows.columns)
@@ -67,5 +68,9 @@ def impute_proteomics_data(df, conditions):
         combined_df = pd.concat([imputed_missing_rows, imputed_non_missing_rows]).sort_index()
         imputed_dfs.append(combined_df)
 
+        # Get indices of rows imputed by IterativeImputer
+        imputed_rows_mask = non_missing_rows.isnull().any(axis=1)
+        iterative_imputer_imputed_indices.extend(non_missing_rows[imputed_rows_mask].index.tolist())
+
     imputed_df = pd.concat(imputed_dfs, axis=1).reindex(columns=df.columns)
-    return imputed_df
+    return imputed_df, detection_limit_imputed_indices, iterative_imputer_imputed_indices
