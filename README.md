@@ -581,6 +581,7 @@ dataset_viz.analyse_values_distribution(figsize=(8,4))
 
     fill na with detection_limit: 116342.31145379972 5.065737687979267 Index(['WT_1.1', 'WT_1.2', 'WT_1.3'], dtype='object')
     fill na with detection_limit: 128099.10559899165 5.107546097466946 Index(['MUT3_1.1', 'MUT3_1.2', 'MUT3_1.3'], dtype='object')
+    152 260
 
 ![](index_files/figure-commonmark/cell-14-output-2.png)
 
@@ -1093,11 +1094,35 @@ results
 </div>
 
 ``` python
+'Tb927.7.6490:mRNA-p1'
+'Target' 'b'
+
+detection_limit_imputed_indices, iterative_imputer_imputed_indices
+protein_names = ['GFP.BLA','Tb427.BES40.22']
+protein_colors=['b','r']
+protein_indices = ['GFP.BLA','Tb427.BES40.22',]
+
+for n in detection_limit_imputed_indices:
+    if n not in protein_indices:
+        protein_indices.append(n)
+        protein_names.append('')
+        protein_colors.append('y')
+for n in iterative_imputer_imputed_indices:
+    if n not in protein_indices:
+        protein_indices.append(n)
+        protein_names.append('')
+        protein_colors.append('c')        
+        
+
 plot_volcano_ma(results, "comparison WT 113", 
-                protein_indices=['GFP.BLA','Tb427.BES40.22'], 
-                protein_ids=['BLA','BES'], protein_colors=['b','r'])
+                protein_indices=protein_indices, 
+                protein_names=protein_names, protein_colors=protein_colors)
 ```
 
 ![](index_files/figure-commonmark/cell-25-output-1.png)
 
 ![](index_files/figure-commonmark/cell-25-output-2.png)
+
+``` python
+#filtered_quantification.head()
+```
