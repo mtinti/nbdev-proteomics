@@ -244,7 +244,8 @@ class SpectronautProcessor(DatasetAnalysis):
         # Apply the mask to the data DataFrame
         filtered_selection = selection.mask(mask)
         filtered_selection = self.replace_zeros(filtered_selection)
-
+        selection['PG.ProteinGroups']=df['PG.ProteinGroups'].values
+        selection=selection.set_index('PG.ProteinGroups',inplace=True)
         return filtered_selection
     
 
@@ -252,9 +253,10 @@ class SpectronautProcessor(DatasetAnalysis):
     #for quantification analysis
     def process(self):
         df = pd.read_csv(self.filename, sep="\t")
+        #print(df.head())
         filtered_quantification = self.filter_protein_quantification(df)
         filtered_quantification = filtered_quantification.rename(self.column_mapping,axis=1)
-        filtered_quantification=filtered_quantification.astype(float)
+        filtered_quantification = filtered_quantification.astype(float)
         return filtered_quantification
 
 
