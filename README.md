@@ -449,15 +449,15 @@ dataset_viz.analyse_values_distribution(figsize=(8,4))
     MUT3_1.3    1.011736
     dtype: float64
 
-![](index_files/figure-commonmark/cell-9-output-2.png)
+![](index_files/figure-commonmark/cell-10-output-2.png)
 
-![](index_files/figure-commonmark/cell-9-output-3.png)
+![](index_files/figure-commonmark/cell-10-output-3.png)
 
-![](index_files/figure-commonmark/cell-9-output-4.png)
+![](index_files/figure-commonmark/cell-10-output-4.png)
 
-![](index_files/figure-commonmark/cell-9-output-5.png)
+![](index_files/figure-commonmark/cell-10-output-5.png)
 
-![](index_files/figure-commonmark/cell-9-output-6.png)
+![](index_files/figure-commonmark/cell-10-output-6.png)
 
 ``` python
 df_norm_load.describe()
@@ -583,15 +583,15 @@ dataset_viz.analyse_values_distribution(figsize=(8,4))
     fill na with detection_limit: 128099.10559899165 5.107546097466946 Index(['MUT3_1.1', 'MUT3_1.2', 'MUT3_1.3'], dtype='object')
     152 260
 
-![](index_files/figure-commonmark/cell-14-output-2.png)
+![](index_files/figure-commonmark/cell-15-output-2.png)
 
-![](index_files/figure-commonmark/cell-14-output-3.png)
+![](index_files/figure-commonmark/cell-15-output-3.png)
 
-![](index_files/figure-commonmark/cell-14-output-4.png)
+![](index_files/figure-commonmark/cell-15-output-4.png)
 
-![](index_files/figure-commonmark/cell-14-output-5.png)
+![](index_files/figure-commonmark/cell-15-output-5.png)
 
-![](index_files/figure-commonmark/cell-14-output-6.png)
+![](index_files/figure-commonmark/cell-15-output-6.png)
 
 ``` python
 df_norm_load_imputed.describe()
@@ -710,13 +710,13 @@ color_to_label = {'r': 'WT', 'b': 'MUT'}
 plot_mds_columns(imputed_selection_normed, colors, color_to_label)
 ```
 
-![](index_files/figure-commonmark/cell-18-output-1.png)
+![](index_files/figure-commonmark/cell-19-output-1.png)
 
 ``` python
 plot_pca_columns(imputed_selection_normed, colors, color_to_label)
 ```
 
-![](index_files/figure-commonmark/cell-19-output-1.png)
+![](index_files/figure-commonmark/cell-20-output-1.png)
 
 ``` python
 imputed_selection_normed.describe()
@@ -1107,6 +1107,7 @@ for n in detection_limit_imputed_indices:
         protein_indices.append(n)
         protein_names.append('')
         protein_colors.append('y')
+
 for n in iterative_imputer_imputed_indices:
     if n not in protein_indices:
         protein_indices.append(n)
@@ -1119,9 +1120,9 @@ plot_volcano_ma(results, "comparison WT 113",
                 protein_names=protein_names, protein_colors=protein_colors)
 ```
 
-![](index_files/figure-commonmark/cell-25-output-1.png)
+![](index_files/figure-commonmark/cell-26-output-1.png)
 
-![](index_files/figure-commonmark/cell-25-output-2.png)
+![](index_files/figure-commonmark/cell-26-output-2.png)
 
 ``` python
 #filtered_quantification.head()
