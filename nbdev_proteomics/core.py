@@ -247,6 +247,10 @@ class SpectronautProcessor(DatasetAnalysis):
         filtered_selection = filtered_selection.astype(float)
         filtered_selection['PG.ProteinGroups']=df['PG.ProteinGroups'].values
         filtered_selection.set_index('PG.ProteinGroups',inplace=True)
+        filtered_selection = filtered_selection[
+            [n for n in filtered_selection.columns if n.endswith('.PG.Quantity')]]
+        filtered_selection.columns = [n.split(' ')[1].replace('.PG.Quantity','')
+                                      for n in filtered_selection.columns]
         filtered_selection = filtered_selection.rename(self.column_mapping,axis=1)
         #print(filtered_selection)
         
