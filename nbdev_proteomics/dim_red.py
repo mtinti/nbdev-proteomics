@@ -21,7 +21,7 @@ def normalize_dataframe(in_df):
                         columns=in_df.columns)
 
 # %% ../nbs/01_dim_red.ipynb 5
-def plot_mds_columns(in_df, colors, color_to_label, figsize=(4,4), annotate=True,adjust=True):
+def plot_mds_columns(in_df, colors, color_to_label, figsize=(4,4), annotate=True, adjust=True, fig_name = False):
     # Normalize the input DataFrame
     normalized_df = normalize_dataframe(in_df)
 
@@ -61,9 +61,11 @@ def plot_mds_columns(in_df, colors, color_to_label, figsize=(4,4), annotate=True
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_position(('outward', 10))
     ax.spines['bottom'].set_position(('outward', 10))
-
+    
+    if fig_name:
+        plt.savefig(fig_name)
     # Show the plot
-    plt.show()
+    #plt.show()
     mds_transformed_columns = pd.DataFrame(mds_transformed_columns)
     mds_transformed_columns.columns = ['DIM_1','DIM_2']
     mds_transformed_columns.index = normalized_df.columns
@@ -71,7 +73,7 @@ def plot_mds_columns(in_df, colors, color_to_label, figsize=(4,4), annotate=True
     return mds_transformed_columns
 
 # %% ../nbs/01_dim_red.ipynb 7
-def plot_pca_columns(in_df, colors, color_to_label, figsize=(4,4),annotate=True,adjust=True):
+def plot_pca_columns(in_df, colors, color_to_label, figsize=(4,4),annotate=True,adjust=True, fig_name = False):
     # Normalize the input DataFrame
     normalized_df = normalize_dataframe(in_df)
 
@@ -111,12 +113,16 @@ def plot_pca_columns(in_df, colors, color_to_label, figsize=(4,4),annotate=True,
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_position(('outward', 10))
     ax.spines['bottom'].set_position(('outward', 10))
-
+    
+    if fig_name:
+        plt.savefig(fig_name)
+        
+    
     pca_transformed_columns = pd.DataFrame(pca_transformed_columns)
     pca_transformed_columns.columns = ['DIM_1','DIM_2']
     pca_transformed_columns.index = normalized_df.columns
     # Show the plot
-    plt.show()
+    # plt.show()
     return pca_transformed_columns
 
 
