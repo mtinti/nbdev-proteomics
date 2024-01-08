@@ -261,8 +261,6 @@ class DatasetAnalysis():
         df = df.replace('0',0)
         df = df.replace(0,np.nan)
         return df  
-   
-    
 
 # %% ../nbs/00_core.ipynb 10
 class SpectronautProcessor(DatasetAnalysis):
@@ -293,6 +291,12 @@ class SpectronautProcessor(DatasetAnalysis):
         filtered_selection = selection.mask(mask)
         filtered_selection = self.replace_zeros(filtered_selection)
         filtered_selection = filtered_selection.astype(float)
+        
+        if 'PG.ProteinGroups' not in df.columns:
+            df['PG.ProteinGroups']=df['PG.ProteinAccessions']
+        
+        
+        
         filtered_selection['PG.ProteinGroups']=df['PG.ProteinGroups'].values
         filtered_selection.set_index('PG.ProteinGroups',inplace=True)
         filtered_selection = filtered_selection[
