@@ -73,7 +73,7 @@ def plot_mds_columns(in_df, colors, color_to_label, figsize=(4,4), annotate=True
     return mds_transformed_columns
 
 # %% ../nbs/01_dim_red.ipynb 7
-def plot_pca_columns(in_df, colors, color_to_label, figsize=(4,4),annotate=True,adjust=True, fig_name = False):
+def plot_pca_columns(in_df, colors, color_to_label, figsize=(4,4), annotate=True, adjust=True, fig_name = False):
     # Normalize the input DataFrame
     normalized_df = normalize_dataframe(in_df)
 

@@ -12,9 +12,9 @@ from sklearn.impute import IterativeImputer
 from scipy.stats import truncnorm
 
 # %% ../nbs/02_impute_missing.ipynb 4
-def impute_proteomics_data(df, conditions):
+def impute_proteomics_data(df, conditions, stdev_size=0.2):
     def impute_detection_limit(condition_df, detection_limit):
-        std_dev = detection_limit * 0.2
+        std_dev = detection_limit * stdev_size
 
         def generate_positive_random_value(mean, std_dev):
             a, b = 0, np.inf
