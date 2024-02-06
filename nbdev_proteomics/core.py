@@ -326,10 +326,11 @@ class SpectronautProcessor(DatasetAnalysis):
 class DIAnnProcessor(DatasetAnalysis):
     """Class to make a DIA-NN output
     ready for quntification"""
-    def __init__(self, file_name='', peptides_count='', column_mapping=''):
+    def __init__(self, file_name='', peptides_count='', column_mapping='', min_n_peptide=2):
         self.filename = file_name
         self.column_mapping = self.parse_column_mapping(column_mapping)
         self.peptides_count = peptides_count
+        self.min_n_peptide = min_n_peptide
         
     def filter_protein_quantification(self, df):
         print('use dia-nn')
@@ -338,7 +339,7 @@ class DIAnnProcessor(DatasetAnalysis):
         df_peptide = pd.read_csv(self.peptides_count, sep='\t')
         #name from the R script used to create the peptide count file
         df_peptide.set_index('Var1',inplace=True)
-        good_quant = df_peptide[df_peptide['Freq']>=2]
+        good_quant = df_peptide[df_peptide['Freq']>=self.min_n_peptide]
         filtered_selection=df.loc[good_quant.index.values]
         filtered_selection = self.replace_zeros(filtered_selection)
         return filtered_selection
