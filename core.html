@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Fill in a module description here">
+
+<title>nbdev-proteomics - core</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="nbdev-proteomics - core">
+<meta property="og:description" content="Fill in a module description here">
+<meta property="og:site_name" content="nbdev-proteomics">
+<meta name="twitter:title" content="nbdev-proteomics - core">
+<meta name="twitter:description" content="Fill in a module description here">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">nbdev-proteomics</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./core.html">core</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">nbdev-proteomics</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dim_red.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dim_red</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./impute_missing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">impute_missing</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#plot_volcano_ma" id="toc-plot_volcano_ma" class="nav-link active" data-scroll-target="#plot_volcano_ma">plot_volcano_ma</a></li>
+  <li><a href="#parse_fasta_file" id="toc-parse_fasta_file" class="nav-link" data-scroll-target="#parse_fasta_file">parse_fasta_file</a></li>
+  <li><a href="#datasetviz" id="toc-datasetviz" class="nav-link" data-scroll-target="#datasetviz">DatasetViz</a></li>
+  <li><a href="#norm_loading" id="toc-norm_loading" class="nav-link" data-scroll-target="#norm_loading">norm_loading</a></li>
+  <li><a href="#ires_norm" id="toc-ires_norm" class="nav-link" data-scroll-target="#ires_norm">ires_norm</a></li>
+  <li><a href="#norm_loading_tmt" id="toc-norm_loading_tmt" class="nav-link" data-scroll-target="#norm_loading_tmt">norm_loading_TMT</a></li>
+  <li><a href="#datasetanalysis" id="toc-datasetanalysis" class="nav-link" data-scroll-target="#datasetanalysis">DatasetAnalysis</a></li>
+  <li><a href="#spectronautprocessor" id="toc-spectronautprocessor" class="nav-link" data-scroll-target="#spectronautprocessor">SpectronautProcessor</a></li>
+  <li><a href="#diannprocessor" id="toc-diannprocessor" class="nav-link" data-scroll-target="#diannprocessor">DIAnnProcessor</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/mtinti/nbdev-proteomics/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">core</h1>
+</div>
+
+<div>
+  <div class="description">
+    Fill in a module description here
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<hr>
+<p><a href="https://github.com/mtinti/nbdev-proteomics/blob/main/nbdev_proteomics/core.py#L18" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="plot_volcano_ma" class="level3">
+<h3 class="anchored" data-anchor-id="plot_volcano_ma">plot_volcano_ma</h3>
+<blockquote class="blockquote">
+<pre><code> plot_volcano_ma (df, title, protein_indices=None, protein_names=None,
+                  protein_colors=None)</code></pre>
+</blockquote>
+<hr>
+<p><a href="https://github.com/mtinti/nbdev-proteomics/blob/main/nbdev_proteomics/core.py#L77" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="parse_fasta_file" class="level3">
+<h3 class="anchored" data-anchor-id="parse_fasta_file">parse_fasta_file</h3>
+<blockquote class="blockquote">
+<pre><code> parse_fasta_file (fasta_file)</code></pre>
+</blockquote>
+<p>create a dictionary of protein id to gene product using fasta file from tritrypDB</p>
+<hr>
+<p><a href="https://github.com/mtinti/nbdev-proteomics/blob/main/nbdev_proteomics/core.py#L101" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="datasetviz" class="level3">
+<h3 class="anchored" data-anchor-id="datasetviz">DatasetViz</h3>
+<blockquote class="blockquote">
+<pre><code> DatasetViz (df='', palette=False)</code></pre>
+</blockquote>
+<p>Class to visualize a data frame</p>
+<hr>
+<p><a href="https://github.com/mtinti/nbdev-proteomics/blob/main/nbdev_proteomics/core.py#L163" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="norm_loading" class="level3">
+<h3 class="anchored" data-anchor-id="norm_loading">norm_loading</h3>
+<blockquote class="blockquote">
+<pre><code> norm_loading (df)</code></pre>
+</blockquote>
+<p>normalization loading for the columns of a dataframe the columns shuld be comparable (ie do not mix fractionated samples, for example cytosolic and extracellulars)</p>
+<hr>
+<p><a href="https://github.com/mtinti/nbdev-proteomics/blob/main/nbdev_proteomics/core.py#L192" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="ires_norm" class="level3">
+<h3 class="anchored" data-anchor-id="ires_norm">ires_norm</h3>
+<blockquote class="blockquote">
+<pre><code> ires_norm (df, exps_columns)</code></pre>
+</blockquote>
+<p>implement IRES norm for TMT example irs_df = ires_norm(df.replace(0,np.nan).fillna(df.mean()),[tmt10, tmt6]) remember to set nan again after norm irs_df[df.replace(0,np.nan).isna()]=np.nan</p>
+<hr>
+<p><a href="https://github.com/mtinti/nbdev-proteomics/blob/main/nbdev_proteomics/core.py#L179" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="norm_loading_tmt" class="level3">
+<h3 class="anchored" data-anchor-id="norm_loading_tmt">norm_loading_TMT</h3>
+<blockquote class="blockquote">
+<pre><code> norm_loading_TMT (df)</code></pre>
+</blockquote>
+<hr>
+<p><a href="https://github.com/mtinti/nbdev-proteomics/blob/main/nbdev_proteomics/core.py#L231" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="datasetanalysis" class="level3">
+<h3 class="anchored" data-anchor-id="datasetanalysis">DatasetAnalysis</h3>
+<blockquote class="blockquote">
+<pre><code> DatasetAnalysis ()</code></pre>
+</blockquote>
+<p>Class to store common functions for the analysis of proteomics data</p>
+<hr>
+<p><a href="https://github.com/mtinti/nbdev-proteomics/blob/main/nbdev_proteomics/core.py#L266" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="spectronautprocessor" class="level3">
+<h3 class="anchored" data-anchor-id="spectronautprocessor">SpectronautProcessor</h3>
+<blockquote class="blockquote">
+<pre><code> SpectronautProcessor (file_name='', column_mapping='')</code></pre>
+</blockquote>
+<p>Class to make a Spectronaut output ready for quntification</p>
+<div id="cell-10" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the class with the Spectronaut output file</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and a table to rename the columns</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>processor <span class="op">=</span> SpectronautProcessor(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../toy_datasets/spectronaut_output.tsv"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../toy_datasets/spectronaut_column_mapping.tsv"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Process the file and get the filtered protein quantification DataFrame</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>filtered_quantification <span class="op">=</span> processor.process()</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>filtered_quantification.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>use spec</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/r1/gf3p5gjs5j9gw_49cj98r8b00000gp/T/ipykernel_37232/343760872.py:21: FutureWarning: The default value of regex will change from True to False in a future version.
+  mapping_df['col_name'] = mapping_df['col_name'].str.replace('.IsSingleHit', '.Quantity')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">CELL34.1</th>
+<th data-quarto-table-cell-role="th">CELL34.2</th>
+<th data-quarto-table-cell-role="th">CELL34.3</th>
+<th data-quarto-table-cell-role="th">CELL37.1</th>
+<th data-quarto-table-cell-role="th">CELL37.2</th>
+<th data-quarto-table-cell-role="th">CELL37.3</th>
+<th data-quarto-table-cell-role="th">CELL40.1</th>
+<th data-quarto-table-cell-role="th">CELL40.2</th>
+<th data-quarto-table-cell-role="th">CELL40.3</th>
+<th data-quarto-table-cell-role="th">SN34.1</th>
+<th data-quarto-table-cell-role="th">SN34.2</th>
+<th data-quarto-table-cell-role="th">SN34.3</th>
+<th data-quarto-table-cell-role="th">SN37.1</th>
+<th data-quarto-table-cell-role="th">SN37.2</th>
+<th data-quarto-table-cell-role="th">SN37.3</th>
+<th data-quarto-table-cell-role="th">SN40.1</th>
+<th data-quarto-table-cell-role="th">SN40.2</th>
+<th data-quarto-table-cell-role="th">SN40.3</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">PG.ProteinGroups</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1</td>
+<td>100761.148438</td>
+<td>102093.578125</td>
+<td>111970.757812</td>
+<td>9.912009e+04</td>
+<td>9.892971e+04</td>
+<td>104091.296875</td>
+<td>9.230105e+04</td>
+<td>8.521016e+04</td>
+<td>9.303921e+04</td>
+<td>1.059773e+05</td>
+<td>1.758232e+05</td>
+<td>1.723805e+05</td>
+<td>1.177306e+05</td>
+<td>1.194134e+05</td>
+<td>9.913514e+04</td>
+<td>1.292707e+05</td>
+<td>8.649082e+04</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1</td>
+<td>527764.312500</td>
+<td>500388.437500</td>
+<td>550439.875000</td>
+<td>5.322265e+05</td>
+<td>5.465213e+05</td>
+<td>526252.875000</td>
+<td>5.184422e+05</td>
+<td>5.493845e+05</td>
+<td>5.406865e+05</td>
+<td>1.803380e+06</td>
+<td>2.018498e+06</td>
+<td>2.165891e+06</td>
+<td>1.756413e+06</td>
+<td>1.795156e+06</td>
+<td>1.982255e+06</td>
+<td>1.549031e+06</td>
+<td>1.549369e+06</td>
+<td>1.828279e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1</td>
+<td>944657.187500</td>
+<td>960022.125000</td>
+<td>869661.000000</td>
+<td>1.005103e+06</td>
+<td>1.223561e+06</td>
+<td>260486.875000</td>
+<td>4.613028e+05</td>
+<td>3.256813e+05</td>
+<td>2.587150e+05</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2.306012e+05</td>
+<td>1.692870e+06</td>
+<td>1.343459e+03</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1</td>
+<td>447414.593750</td>
+<td>458718.562500</td>
+<td>461863.687500</td>
+<td>5.140265e+05</td>
+<td>4.905025e+05</td>
+<td>490315.968750</td>
+<td>5.433065e+05</td>
+<td>5.192081e+05</td>
+<td>5.276954e+05</td>
+<td>3.807705e+04</td>
+<td>7.048350e+04</td>
+<td>1.169908e+05</td>
+<td>7.014255e+04</td>
+<td>8.226525e+04</td>
+<td>8.156412e+04</td>
+<td>1.121125e+05</td>
+<td>1.304798e+05</td>
+<td>9.383632e+04</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.150:mRNA-p1;Tb927.5.4500:mRNA-p1</td>
+<td>860323.937500</td>
+<td>824793.812500</td>
+<td>827789.562500</td>
+<td>1.057513e+06</td>
+<td>9.740054e+05</td>
+<td>848213.187500</td>
+<td>1.076790e+06</td>
+<td>1.079964e+06</td>
+<td>1.100252e+06</td>
+<td>3.568418e+06</td>
+<td>2.663594e+05</td>
+<td>4.960689e+05</td>
+<td>1.402994e+06</td>
+<td>9.042108e+05</td>
+<td>5.891444e+05</td>
+<td>1.438731e+06</td>
+<td>2.395180e+05</td>
+<td>1.274326e+06</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-11" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>filtered_quantification.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(49, 18)</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/mtinti/nbdev-proteomics/blob/main/nbdev_proteomics/core.py#L326" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="diannprocessor" class="level3">
+<h3 class="anchored" data-anchor-id="diannprocessor">DIAnnProcessor</h3>
+<blockquote class="blockquote">
+<pre><code> DIAnnProcessor (file_name='', peptides_count='', column_mapping='',
+                 min_n_peptide=2)</code></pre>
+</blockquote>
+<p>Class to make a DIA-NN output ready for quntification</p>
+<div id="cell-13" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the class with the Spectronaut output file</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and a table to rename the columns</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>processor <span class="op">=</span> DIAnnProcessor(</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../toy_datasets/DIA-NN_output.txt"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../toy_datasets/DIA-NN_peptides_counts.txt"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../toy_datasets/DIA-NN_column_mapping.csv"</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Process the file and get the filtered protein quantification DataFrame</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>filtered_quantification <span class="op">=</span> processor.process()</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>filtered_quantification.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>use dia-nn</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/r1/gf3p5gjs5j9gw_49cj98r8b00000gp/T/ipykernel_75592/1785320289.py:21: FutureWarning: The default value of regex will change from True to False in a future version.
+  mapping_df['col_name'] = mapping_df['col_name'].str.replace('.IsSingleHit', '.Quantity')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">WT_1.1</th>
+<th data-quarto-table-cell-role="th">WT_1.2</th>
+<th data-quarto-table-cell-role="th">WT_1.3</th>
+<th data-quarto-table-cell-role="th">MUT3_1.1</th>
+<th data-quarto-table-cell-role="th">MUT3_1.2</th>
+<th data-quarto-table-cell-role="th">MUT3_1.3</th>
+<th data-quarto-table-cell-role="th">MUT4_1.1</th>
+<th data-quarto-table-cell-role="th">MUT4_1.2</th>
+<th data-quarto-table-cell-role="th">MUT4_1.3</th>
+<th data-quarto-table-cell-role="th">WTSOL_2.1</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">WTSOL_3.6</th>
+<th data-quarto-table-cell-role="th">WTINS_3.4</th>
+<th data-quarto-table-cell-role="th">WTINS_3.5</th>
+<th data-quarto-table-cell-role="th">WTINS_3.6</th>
+<th data-quarto-table-cell-role="th">MUT4SOL_3.1</th>
+<th data-quarto-table-cell-role="th">MUT4SOL_3.2</th>
+<th data-quarto-table-cell-role="th">MUT4SOL_3.3</th>
+<th data-quarto-table-cell-role="th">MUT4INS_3.1</th>
+<th data-quarto-table-cell-role="th">MUT4INS_3.2</th>
+<th data-quarto-table-cell-role="th">MUT4INS_3.3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">GFP.BLA</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>9.937347e+06</td>
+<td>1.068154e+07</td>
+<td>9.845878e+06</td>
+<td>9.728128e+06</td>
+<td>1.024333e+07</td>
+<td>9.316970e+06</td>
+<td>NaN</td>
+<td>...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>5.944689e+06</td>
+<td>6.888683e+06</td>
+<td>6.956789e+06</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1</td>
+<td>3.090158e+06</td>
+<td>2.574684e+06</td>
+<td>2.751917e+06</td>
+<td>2.333518e+06</td>
+<td>2.596232e+06</td>
+<td>2.407138e+06</td>
+<td>2.508370e+06</td>
+<td>2.562637e+06</td>
+<td>2.565928e+06</td>
+<td>2.804626e+06</td>
+<td>...</td>
+<td>3.112300e+06</td>
+<td>1.033351e+06</td>
+<td>9.194551e+05</td>
+<td>1.039817e+06</td>
+<td>2.824497e+06</td>
+<td>2.757964e+06</td>
+<td>2.403540e+06</td>
+<td>1.216043e+06</td>
+<td>1.053073e+06</td>
+<td>1.048340e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1</td>
+<td>3.413114e+07</td>
+<td>3.177892e+07</td>
+<td>3.289960e+07</td>
+<td>2.989977e+07</td>
+<td>3.003979e+07</td>
+<td>3.027149e+07</td>
+<td>3.146555e+07</td>
+<td>3.074012e+07</td>
+<td>3.075175e+07</td>
+<td>3.512207e+07</td>
+<td>...</td>
+<td>3.574694e+07</td>
+<td>1.975402e+06</td>
+<td>1.821761e+06</td>
+<td>1.814954e+06</td>
+<td>3.279010e+07</td>
+<td>3.208254e+07</td>
+<td>3.190298e+07</td>
+<td>1.931748e+06</td>
+<td>1.978563e+06</td>
+<td>1.991076e+06</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1</td>
+<td>4.962111e+06</td>
+<td>5.049931e+06</td>
+<td>4.865019e+06</td>
+<td>4.767877e+06</td>
+<td>4.826146e+06</td>
+<td>4.738838e+06</td>
+<td>4.982286e+06</td>
+<td>4.989706e+06</td>
+<td>4.672616e+06</td>
+<td>6.168714e+05</td>
+<td>...</td>
+<td>1.333413e+06</td>
+<td>8.680057e+06</td>
+<td>8.580248e+06</td>
+<td>8.776530e+06</td>
+<td>1.135220e+06</td>
+<td>9.074091e+05</td>
+<td>9.992258e+05</td>
+<td>8.560026e+06</td>
+<td>8.473488e+06</td>
+<td>8.810763e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1</td>
+<td>3.773686e+07</td>
+<td>3.370411e+07</td>
+<td>2.815374e+07</td>
+<td>2.328151e+07</td>
+<td>2.889554e+07</td>
+<td>3.085169e+07</td>
+<td>3.111706e+07</td>
+<td>3.134872e+07</td>
+<td>2.640844e+07</td>
+<td>4.603374e+06</td>
+<td>...</td>
+<td>8.123416e+06</td>
+<td>8.085395e+07</td>
+<td>8.397210e+07</td>
+<td>8.286466e+07</td>
+<td>6.640407e+06</td>
+<td>7.224879e+06</td>
+<td>7.921410e+06</td>
+<td>8.585187e+07</td>
+<td>8.267973e+07</td>
+<td>8.537414e+07</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 33 columns</p>
+</div>
+</div>
+</div>
+<div id="cell-14" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#processor.analyse_missing_values(filtered_quantification,figsize=(16,4))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-15" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>dataset_viz <span class="op">=</span> DatasetViz(df <span class="op">=</span> filtered_quantification)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>dataset_viz.analyse_missing_values(figsize<span class="op">=</span>(<span class="dv">16</span>,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="00_core_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/r1/gf3p5gjs5j9gw_49cj98r8b00000gp/T/ipykernel_75592/1333467333.py:33: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout()</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="00_core_files/figure-html/cell-15-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="00_core_files/figure-html/cell-15-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-16" class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dataset_viz.analyse_values_distribution(figsize<span class="op">=</span>(<span class="dv">16</span>,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="00_core_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="00_core_files/figure-html/cell-16-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#filtered_quantification.tail(50)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/mtinti/nbdev-proteomics/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

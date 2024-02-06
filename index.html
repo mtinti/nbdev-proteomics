@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="process proteomic quantification">
+
+<title>nbdev-proteomics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="nbdev-proteomics">
+<meta property="og:description" content="process proteomic quantification">
+<meta property="og:site_name" content="nbdev-proteomics">
+<meta name="twitter:title" content="nbdev-proteomics">
+<meta name="twitter:description" content="process proteomic quantification">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">nbdev-proteomics</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">nbdev-proteomics</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">nbdev-proteomics</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dim_red.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dim_red</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./impute_missing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">impute_missing</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#install" id="toc-install" class="nav-link active" data-scroll-target="#install">Install</a></li>
+  <li><a href="#how-to-use" id="toc-how-to-use" class="nav-link" data-scroll-target="#how-to-use">How to use</a></li>
+  <li><a href="#exctract-a-subset-of-the-dataframe" id="toc-exctract-a-subset-of-the-dataframe" class="nav-link" data-scroll-target="#exctract-a-subset-of-the-dataframe">exctract a subset of the dataframe</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/mtinti/nbdev-proteomics/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">nbdev-proteomics</h1>
+</div>
+
+<div>
+  <div class="description">
+    process proteomic quantification
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>A collection of utilities to process proteomics data</p>
+<section id="install" class="level2">
+<h2 class="anchored" data-anchor-id="install">Install</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install nbdev_proteomics</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="how-to-use" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-use">How to use</h2>
+<p>Let’s start by uploading a dataset from a DIA-NN analysis</p>
+<div id="cell-7" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the class with the DIA-NN output file</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># a table to rename the columns and a peptide counts file</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>processor <span class="op">=</span> DIAnnProcessor(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../toy_datasets/DIA-NN_output.txt"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../toy_datasets/DIA-NN_peptides_counts.txt"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../toy_datasets/DIA-NN_column_mapping.csv"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Process the file and get the filtered protein quantification DataFrame</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>filtered_quantification <span class="op">=</span> processor.process()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>filtered_quantification.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>use dia-nn</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">WT_1.1</th>
+<th data-quarto-table-cell-role="th">WT_1.2</th>
+<th data-quarto-table-cell-role="th">WT_1.3</th>
+<th data-quarto-table-cell-role="th">MUT3_1.1</th>
+<th data-quarto-table-cell-role="th">MUT3_1.2</th>
+<th data-quarto-table-cell-role="th">MUT3_1.3</th>
+<th data-quarto-table-cell-role="th">MUT4_1.1</th>
+<th data-quarto-table-cell-role="th">MUT4_1.2</th>
+<th data-quarto-table-cell-role="th">MUT4_1.3</th>
+<th data-quarto-table-cell-role="th">WTSOL_2.1</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">WTSOL_3.6</th>
+<th data-quarto-table-cell-role="th">WTINS_3.4</th>
+<th data-quarto-table-cell-role="th">WTINS_3.5</th>
+<th data-quarto-table-cell-role="th">WTINS_3.6</th>
+<th data-quarto-table-cell-role="th">MUT4SOL_3.1</th>
+<th data-quarto-table-cell-role="th">MUT4SOL_3.2</th>
+<th data-quarto-table-cell-role="th">MUT4SOL_3.3</th>
+<th data-quarto-table-cell-role="th">MUT4INS_3.1</th>
+<th data-quarto-table-cell-role="th">MUT4INS_3.2</th>
+<th data-quarto-table-cell-role="th">MUT4INS_3.3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">GFP.BLA</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>9.937347e+06</td>
+<td>1.068154e+07</td>
+<td>9.845878e+06</td>
+<td>9.728128e+06</td>
+<td>1.024333e+07</td>
+<td>9.316970e+06</td>
+<td>NaN</td>
+<td>...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>5.944689e+06</td>
+<td>6.888683e+06</td>
+<td>6.956789e+06</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1</td>
+<td>3.090158e+06</td>
+<td>2.574684e+06</td>
+<td>2.751917e+06</td>
+<td>2.333518e+06</td>
+<td>2.596232e+06</td>
+<td>2.407138e+06</td>
+<td>2.508370e+06</td>
+<td>2.562637e+06</td>
+<td>2.565928e+06</td>
+<td>2.804626e+06</td>
+<td>...</td>
+<td>3.112300e+06</td>
+<td>1.033351e+06</td>
+<td>9.194551e+05</td>
+<td>1.039817e+06</td>
+<td>2.824497e+06</td>
+<td>2.757964e+06</td>
+<td>2.403540e+06</td>
+<td>1.216043e+06</td>
+<td>1.053073e+06</td>
+<td>1.048340e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1</td>
+<td>3.413114e+07</td>
+<td>3.177892e+07</td>
+<td>3.289960e+07</td>
+<td>2.989977e+07</td>
+<td>3.003979e+07</td>
+<td>3.027149e+07</td>
+<td>3.146555e+07</td>
+<td>3.074012e+07</td>
+<td>3.075175e+07</td>
+<td>3.512207e+07</td>
+<td>...</td>
+<td>3.574694e+07</td>
+<td>1.975402e+06</td>
+<td>1.821761e+06</td>
+<td>1.814954e+06</td>
+<td>3.279010e+07</td>
+<td>3.208254e+07</td>
+<td>3.190298e+07</td>
+<td>1.931748e+06</td>
+<td>1.978563e+06</td>
+<td>1.991076e+06</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1</td>
+<td>4.962111e+06</td>
+<td>5.049931e+06</td>
+<td>4.865019e+06</td>
+<td>4.767877e+06</td>
+<td>4.826146e+06</td>
+<td>4.738838e+06</td>
+<td>4.982286e+06</td>
+<td>4.989706e+06</td>
+<td>4.672616e+06</td>
+<td>6.168714e+05</td>
+<td>...</td>
+<td>1.333413e+06</td>
+<td>8.680057e+06</td>
+<td>8.580248e+06</td>
+<td>8.776530e+06</td>
+<td>1.135220e+06</td>
+<td>9.074091e+05</td>
+<td>9.992258e+05</td>
+<td>8.560026e+06</td>
+<td>8.473488e+06</td>
+<td>8.810763e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1</td>
+<td>3.773686e+07</td>
+<td>3.370411e+07</td>
+<td>2.815374e+07</td>
+<td>2.328151e+07</td>
+<td>2.889554e+07</td>
+<td>3.085169e+07</td>
+<td>3.111706e+07</td>
+<td>3.134872e+07</td>
+<td>2.640844e+07</td>
+<td>4.603374e+06</td>
+<td>...</td>
+<td>8.123416e+06</td>
+<td>8.085395e+07</td>
+<td>8.397210e+07</td>
+<td>8.286466e+07</td>
+<td>6.640407e+06</td>
+<td>7.224879e+06</td>
+<td>7.921410e+06</td>
+<td>8.585187e+07</td>
+<td>8.267973e+07</td>
+<td>8.537414e+07</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 33 columns</p>
+</div>
+</div>
+</div>
+<div id="cell-8" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'r'</span>]<span class="op">*</span>filtered_quantification.shape[<span class="dv">1</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>color_to_label <span class="op">=</span> {<span class="st">'r'</span>: <span class="st">'exp'</span>}</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plot_pca_columns(np.log2(filtered_quantification).dropna(), colors,color_to_label, figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-9" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'r'</span>]<span class="op">*</span>filtered_quantification.shape[<span class="dv">1</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>color_to_label <span class="op">=</span> {<span class="st">'r'</span>: <span class="st">'exp'</span>}</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plot_mds_columns(np.log2(filtered_quantification).dropna(), colors, color_to_label, figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="exctract-a-subset-of-the-dataframe" class="level2">
+<h2 class="anchored" data-anchor-id="exctract-a-subset-of-the-dataframe">exctract a subset of the dataframe</h2>
+<div id="cell-12" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> filtered_quantification.iloc[:,:<span class="dv">6</span>]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna(how<span class="op">=</span><span class="st">'all'</span>,axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(6243, 6)
+(6243, 6)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">WT_1.1</th>
+<th data-quarto-table-cell-role="th">WT_1.2</th>
+<th data-quarto-table-cell-role="th">WT_1.3</th>
+<th data-quarto-table-cell-role="th">MUT3_1.1</th>
+<th data-quarto-table-cell-role="th">MUT3_1.2</th>
+<th data-quarto-table-cell-role="th">MUT3_1.3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">GFP.BLA</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>9.937347e+06</td>
+<td>1.068154e+07</td>
+<td>9.845878e+06</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1</td>
+<td>3.090158e+06</td>
+<td>2.574684e+06</td>
+<td>2.751917e+06</td>
+<td>2.333518e+06</td>
+<td>2.596232e+06</td>
+<td>2.407138e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1</td>
+<td>3.413114e+07</td>
+<td>3.177892e+07</td>
+<td>3.289960e+07</td>
+<td>2.989977e+07</td>
+<td>3.003979e+07</td>
+<td>3.027149e+07</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1</td>
+<td>4.962111e+06</td>
+<td>5.049931e+06</td>
+<td>4.865019e+06</td>
+<td>4.767877e+06</td>
+<td>4.826146e+06</td>
+<td>4.738838e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1</td>
+<td>3.773686e+07</td>
+<td>3.370411e+07</td>
+<td>2.815374e+07</td>
+<td>2.328151e+07</td>
+<td>2.889554e+07</td>
+<td>3.085169e+07</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-13" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">WT_1.1</th>
+<th data-quarto-table-cell-role="th">WT_1.2</th>
+<th data-quarto-table-cell-role="th">WT_1.3</th>
+<th data-quarto-table-cell-role="th">MUT3_1.1</th>
+<th data-quarto-table-cell-role="th">MUT3_1.2</th>
+<th data-quarto-table-cell-role="th">MUT3_1.3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>6.121000e+03</td>
+<td>6.100000e+03</td>
+<td>6.103000e+03</td>
+<td>6.093000e+03</td>
+<td>6.107000e+03</td>
+<td>6.116000e+03</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>3.599249e+07</td>
+<td>3.543187e+07</td>
+<td>3.535706e+07</td>
+<td>3.248318e+07</td>
+<td>3.240360e+07</td>
+<td>3.263686e+07</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>3.026840e+08</td>
+<td>2.929701e+08</td>
+<td>3.003849e+08</td>
+<td>2.607200e+08</td>
+<td>2.501787e+08</td>
+<td>2.565394e+08</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>3.204720e+04</td>
+<td>6.152255e+04</td>
+<td>3.883329e+04</td>
+<td>6.272731e+04</td>
+<td>9.318066e+04</td>
+<td>8.053832e+04</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>2.071758e+06</td>
+<td>2.104831e+06</td>
+<td>2.123954e+06</td>
+<td>2.055398e+06</td>
+<td>2.105090e+06</td>
+<td>2.034196e+06</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>4.921638e+06</td>
+<td>4.928115e+06</td>
+<td>4.907622e+06</td>
+<td>4.794456e+06</td>
+<td>4.868387e+06</td>
+<td>4.816218e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>1.327099e+07</td>
+<td>1.310617e+07</td>
+<td>1.300904e+07</td>
+<td>1.269331e+07</td>
+<td>1.262831e+07</td>
+<td>1.285196e+07</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>1.643516e+10</td>
+<td>1.617111e+10</td>
+<td>1.550483e+10</td>
+<td>1.319888e+10</td>
+<td>1.241172e+10</td>
+<td>1.318592e+10</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-14" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dataset_viz <span class="op">=</span> DatasetViz(df <span class="op">=</span> df, palette <span class="op">=</span> [<span class="st">'r'</span>]<span class="op">*</span><span class="dv">3</span><span class="op">+</span>[<span class="st">'b'</span>]<span class="op">*</span><span class="dv">3</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dataset_viz.analyse_missing_values(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">4</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>dataset_viz.analyse_values_distribution(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-5.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-16" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_norm_load <span class="op">=</span> norm_loading(df)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dataset_viz <span class="op">=</span> DatasetViz(df <span class="op">=</span> df_norm_load, palette <span class="op">=</span> [<span class="st">'r'</span>]<span class="op">*</span><span class="dv">3</span><span class="op">+</span>[<span class="st">'b'</span>]<span class="op">*</span><span class="dv">3</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>dataset_viz.analyse_missing_values(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">4</span>))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>dataset_viz.analyse_values_distribution(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>WT_1.1      4.921638e+06
+WT_1.2      4.928115e+06
+WT_1.3      4.907622e+06
+MUT3_1.1    4.794456e+06
+MUT3_1.2    4.868387e+06
+MUT3_1.3    4.816218e+06
+dtype: float64
+4872739.30693322
+WT_1.1      0.990065
+WT_1.2      0.988763
+WT_1.3      0.992892
+MUT3_1.1    1.016328
+MUT3_1.2    1.000894
+MUT3_1.3    1.011736
+dtype: float64</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-5.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-6.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df_norm_load.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">WT_1.1</th>
+<th data-quarto-table-cell-role="th">WT_1.2</th>
+<th data-quarto-table-cell-role="th">WT_1.3</th>
+<th data-quarto-table-cell-role="th">MUT3_1.1</th>
+<th data-quarto-table-cell-role="th">MUT3_1.2</th>
+<th data-quarto-table-cell-role="th">MUT3_1.3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>6.121000e+03</td>
+<td>6.100000e+03</td>
+<td>6.103000e+03</td>
+<td>6.093000e+03</td>
+<td>6.107000e+03</td>
+<td>6.116000e+03</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>3.563489e+07</td>
+<td>3.503373e+07</td>
+<td>3.510575e+07</td>
+<td>3.301356e+07</td>
+<td>3.243256e+07</td>
+<td>3.301988e+07</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>2.996768e+08</td>
+<td>2.896781e+08</td>
+<td>2.982498e+08</td>
+<td>2.649770e+08</td>
+<td>2.504023e+08</td>
+<td>2.595501e+08</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>3.172880e+04</td>
+<td>6.083124e+04</td>
+<td>3.855726e+04</td>
+<td>6.375152e+04</td>
+<td>9.326396e+04</td>
+<td>8.148349e+04</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>2.051175e+06</td>
+<td>2.081180e+06</td>
+<td>2.108857e+06</td>
+<td>2.088959e+06</td>
+<td>2.106972e+06</td>
+<td>2.058069e+06</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>4.872739e+06</td>
+<td>4.872739e+06</td>
+<td>4.872739e+06</td>
+<td>4.872739e+06</td>
+<td>4.872739e+06</td>
+<td>4.872739e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>1.313913e+07</td>
+<td>1.295890e+07</td>
+<td>1.291657e+07</td>
+<td>1.290056e+07</td>
+<td>1.263960e+07</td>
+<td>1.300279e+07</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>1.627187e+10</td>
+<td>1.598940e+10</td>
+<td>1.539462e+10</td>
+<td>1.341439e+10</td>
+<td>1.242281e+10</td>
+<td>1.334066e+10</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-20" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(152, 260)</code></pre>
+</div>
+</div>
+<div id="cell-21" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_norm_load_imputed, detection_limit_imputed_indices, iterative_imputer_imputed_indices <span class="op">=</span> impute_proteomics_data(df_norm_load, [<span class="st">'A'</span>,<span class="st">'A'</span>,<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'B'</span>,<span class="st">'B'</span>])</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dataset_viz <span class="op">=</span> DatasetViz(df <span class="op">=</span> df_norm_load_imputed,palette <span class="op">=</span> [<span class="st">'r'</span>]<span class="op">*</span><span class="dv">3</span><span class="op">+</span>[<span class="st">'b'</span>]<span class="op">*</span><span class="dv">3</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(detection_limit_imputed_indices),<span class="bu">len</span>(iterative_imputer_imputed_indices))</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>dataset_viz.analyse_missing_values(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">4</span>))</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>dataset_viz.analyse_values_distribution(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>fill na with detection_limit: 116342.31145379972 5.065737687979267 Index(['WT_1.1', 'WT_1.2', 'WT_1.3'], dtype='object')
+fill na with detection_limit: 128099.10559899165 5.107546097466946 Index(['MUT3_1.1', 'MUT3_1.2', 'MUT3_1.3'], dtype='object')
+152 260</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-15-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-15-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-15-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-15-output-5.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-15-output-6.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-22" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_norm_load_imputed.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">WT_1.1</th>
+<th data-quarto-table-cell-role="th">WT_1.2</th>
+<th data-quarto-table-cell-role="th">WT_1.3</th>
+<th data-quarto-table-cell-role="th">MUT3_1.1</th>
+<th data-quarto-table-cell-role="th">MUT3_1.2</th>
+<th data-quarto-table-cell-role="th">MUT3_1.3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>6.243000e+03</td>
+<td>6.243000e+03</td>
+<td>6.243000e+03</td>
+<td>6.243000e+03</td>
+<td>6.243000e+03</td>
+<td>6.243000e+03</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>3.500385e+07</td>
+<td>3.428577e+07</td>
+<td>3.435545e+07</td>
+<td>3.223566e+07</td>
+<td>3.174944e+07</td>
+<td>3.236610e+07</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>2.967683e+08</td>
+<td>2.863835e+08</td>
+<td>2.949284e+08</td>
+<td>2.618208e+08</td>
+<td>2.477018e+08</td>
+<td>2.569362e+08</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>5.828539e+04</td>
+<td>7.446140e+04</td>
+<td>6.129801e+04</td>
+<td>6.644884e+04</td>
+<td>5.337315e+04</td>
+<td>8.427987e+04</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>1.973416e+06</td>
+<td>1.957926e+06</td>
+<td>1.994725e+06</td>
+<td>1.993400e+06</td>
+<td>2.034857e+06</td>
+<td>1.977900e+06</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>4.810964e+06</td>
+<td>4.729558e+06</td>
+<td>4.746362e+06</td>
+<td>4.700474e+06</td>
+<td>4.700683e+06</td>
+<td>4.711367e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>1.285453e+07</td>
+<td>1.278215e+07</td>
+<td>1.271491e+07</td>
+<td>1.244475e+07</td>
+<td>1.227793e+07</td>
+<td>1.252151e+07</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>1.627187e+10</td>
+<td>1.598940e+10</td>
+<td>1.539462e+10</td>
+<td>1.341439e+10</td>
+<td>1.242281e+10</td>
+<td>1.334066e+10</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-24" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>imputed_selection_normed <span class="op">=</span> np.log2(df_norm_load_imputed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-25" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'r'</span>]<span class="op">*</span><span class="dv">3</span><span class="op">+</span>[<span class="st">'b'</span>]<span class="op">*</span><span class="dv">3</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>color_to_label <span class="op">=</span> {<span class="st">'r'</span>: <span class="st">'WT'</span>, <span class="st">'b'</span>: <span class="st">'MUT'</span>}</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>plot_mds_columns(imputed_selection_normed, colors, color_to_label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-26" class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plot_pca_columns(imputed_selection_normed, colors, color_to_label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-20-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-27" class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>imputed_selection_normed.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">WT_1.1</th>
+<th data-quarto-table-cell-role="th">WT_1.2</th>
+<th data-quarto-table-cell-role="th">WT_1.3</th>
+<th data-quarto-table-cell-role="th">MUT3_1.1</th>
+<th data-quarto-table-cell-role="th">MUT3_1.2</th>
+<th data-quarto-table-cell-role="th">MUT3_1.3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>6243.000000</td>
+<td>6243.000000</td>
+<td>6243.000000</td>
+<td>6243.000000</td>
+<td>6243.000000</td>
+<td>6243.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>22.403594</td>
+<td>22.382280</td>
+<td>22.377914</td>
+<td>22.359599</td>
+<td>22.385108</td>
+<td>22.371003</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>2.261674</td>
+<td>2.252626</td>
+<td>2.247010</td>
+<td>2.249750</td>
+<td>2.203008</td>
+<td>2.242486</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>15.830847</td>
+<td>16.184205</td>
+<td>15.903553</td>
+<td>16.019956</td>
+<td>15.703827</td>
+<td>16.362901</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>20.912263</td>
+<td>20.900894</td>
+<td>20.927758</td>
+<td>20.926800</td>
+<td>20.956496</td>
+<td>20.915538</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>22.197895</td>
+<td>22.173274</td>
+<td>22.178391</td>
+<td>22.164375</td>
+<td>22.164439</td>
+<td>22.167714</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>23.615773</td>
+<td>23.607625</td>
+<td>23.600017</td>
+<td>23.569034</td>
+<td>23.549561</td>
+<td>23.577906</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>33.921661</td>
+<td>33.896397</td>
+<td>33.841707</td>
+<td>33.643062</td>
+<td>33.532273</td>
+<td>33.635111</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-28" class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>imputed_selection_normed.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">WT_1.1</th>
+<th data-quarto-table-cell-role="th">WT_1.2</th>
+<th data-quarto-table-cell-role="th">WT_1.3</th>
+<th data-quarto-table-cell-role="th">MUT3_1.1</th>
+<th data-quarto-table-cell-role="th">MUT3_1.2</th>
+<th data-quarto-table-cell-role="th">MUT3_1.3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">GFP.BLA</td>
+<td>17.350618</td>
+<td>16.877316</td>
+<td>17.281742</td>
+<td>23.267795</td>
+<td>23.349905</td>
+<td>23.247921</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1</td>
+<td>21.544844</td>
+<td>21.279661</td>
+<td>21.381715</td>
+<td>21.177441</td>
+<td>21.309277</td>
+<td>21.215720</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1</td>
+<td>25.010180</td>
+<td>24.905264</td>
+<td>24.961276</td>
+<td>24.856997</td>
+<td>24.841660</td>
+<td>24.868289</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1</td>
+<td>22.228117</td>
+<td>22.251529</td>
+<td>22.203723</td>
+<td>22.208281</td>
+<td>22.203729</td>
+<td>22.192934</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1</td>
+<td>25.155066</td>
+<td>24.990118</td>
+<td>24.736532</td>
+<td>24.496047</td>
+<td>24.785633</td>
+<td>24.895679</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-29" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>library(<span class="st">"limma"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>limma_differential_expression <span class="op">&lt;-</span> function(df, replicates_A, replicates_B) {</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define sample groups</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  sample_groups <span class="op">&lt;-</span> factor(</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    c(rep(<span class="st">"A"</span>, replicates_A), rep(<span class="st">"B"</span>, replicates_B)),</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    levels <span class="op">=</span> c(<span class="st">"A"</span>, <span class="st">"B"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a design matrix</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  design_matrix <span class="op">&lt;-</span> model.matrix(<span class="op">~</span><span class="dv">0</span> <span class="op">+</span> sample_groups)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  colnames(design_matrix) <span class="op">&lt;-</span> c(<span class="st">"A"</span>, <span class="st">"B"</span>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit a linear model to the data</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  lm_fit <span class="op">&lt;-</span> lmFit(df, design_matrix)</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define contrasts (comparisons between groups)</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>  contrast_matrix <span class="op">&lt;-</span> makeContrasts(<span class="st">"B-A"</span>, levels <span class="op">=</span> design_matrix)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit the contrasts to the linear model</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  contrasted_fit <span class="op">&lt;-</span> contrasts.fit(lm_fit, contrast_matrix)</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Apply empirical Bayes smoothing</span></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>  ebayes_fit <span class="op">&lt;-</span> eBayes(contrasted_fit)</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract results without sorting and return all rows</span></span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>  results <span class="op">&lt;-</span> topTable(ebayes_fit, coef <span class="op">=</span> <span class="dv">1</span>, sort.by <span class="op">=</span> <span class="st">"none"</span>, number <span class="op">=</span> Inf)</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(results)</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-30" class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">&lt;-</span> limma_differential_expression(imputed_selection_normed, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>head(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                logFC  AveExpr          t
+GFP.BLA                                    6.11864849 20.22922 47.3293349
+Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1 -0.16792710 21.31811 -2.1050623
+Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1 -0.10325758 24.90728 -2.3404239
+Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1 -0.02614141 22.21472 -0.6920798
+Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1 -0.23478582 24.84318 -1.6221870
+Tb05.5K5.150:mRNA-p1;Tb927.5.4500:mRNA-p1 -0.05630553 26.25538 -0.7968936
+                                               P.Value    adj.P.Val         B
+GFP.BLA                                   7.631331e-09 0.0000150629 10.199640
+Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1 8.067602e-02 0.2250493179 -5.509594
+Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1 5.850568e-02 0.1864476665 -5.178813
+Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1 5.151720e-01 0.6812580102 -7.165282
+Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1 1.567006e-01 0.3291661121 -6.166449
+Tb05.5K5.150:mRNA-p1;Tb927.5.4500:mRNA-p1 4.563586e-01 0.6366584845 -7.082207</code></pre>
+</div>
+</div>
+<div id="cell-31" class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">logFC</th>
+<th data-quarto-table-cell-role="th">AveExpr</th>
+<th data-quarto-table-cell-role="th">t</th>
+<th data-quarto-table-cell-role="th">P.Value</th>
+<th data-quarto-table-cell-role="th">adj.P.Val</th>
+<th data-quarto-table-cell-role="th">B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">GFP.BLA</td>
+<td>6.118648</td>
+<td>20.229216</td>
+<td>47.329335</td>
+<td>7.631331e-09</td>
+<td>0.000015</td>
+<td>10.199640</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.100:mRNA-p1;Tb927.5.4450:mRNA-p1</td>
+<td>-0.167927</td>
+<td>21.318110</td>
+<td>-2.105062</td>
+<td>8.067602e-02</td>
+<td>0.225049</td>
+<td>-5.509594</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.110:mRNA-p1;Tb927.5.4460:mRNA-p1</td>
+<td>-0.103258</td>
+<td>24.907278</td>
+<td>-2.340424</td>
+<td>5.850568e-02</td>
+<td>0.186448</td>
+<td>-5.178813</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb05.5K5.120:mRNA-p1;Tb927.5.4470:mRNA-p1</td>
+<td>-0.026141</td>
+<td>22.214719</td>
+<td>-0.692080</td>
+<td>5.151720e-01</td>
+<td>0.681258</td>
+<td>-7.165282</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb05.5K5.130:mRNA-p1;Tb927.5.4480:mRNA-p1</td>
+<td>-0.234786</td>
+<td>24.843179</td>
+<td>-1.622187</td>
+<td>1.567006e-01</td>
+<td>0.329166</td>
+<td>-6.166449</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb927.9.9870:mRNA-p1</td>
+<td>0.021158</td>
+<td>23.977410</td>
+<td>0.505039</td>
+<td>6.318267e-01</td>
+<td>0.766390</td>
+<td>-7.288104</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb927.9.9940:mRNA-p1</td>
+<td>0.110974</td>
+<td>26.507374</td>
+<td>2.625228</td>
+<td>3.991415e-02</td>
+<td>0.154869</td>
+<td>-4.777352</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb927.9.9950:mRNA-p1</td>
+<td>0.086074</td>
+<td>19.670132</td>
+<td>0.734206</td>
+<td>4.909454e-01</td>
+<td>0.663127</td>
+<td>-7.133060</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Tb927.9.9960:mRNA-p1</td>
+<td>-0.265460</td>
+<td>21.796494</td>
+<td>-6.330320</td>
+<td>7.743785e-04</td>
+<td>0.022843</td>
+<td>-0.428122</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Tb927.9.9970:mRNA-p1</td>
+<td>-0.037307</td>
+<td>21.473382</td>
+<td>-0.671685</td>
+<td>5.271806e-01</td>
+<td>0.690266</td>
+<td>-7.180301</td>
+</tr>
+</tbody>
+</table>
+
+<p>6243 rows × 6 columns</p>
+</div>
+</div>
+</div>
+<div id="cell-32" class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">'Tb927.7.6490:mRNA-p1'</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">'Target'</span> <span class="st">'b'</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>detection_limit_imputed_indices, iterative_imputer_imputed_indices</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>protein_names <span class="op">=</span> [<span class="st">'GFP.BLA'</span>,<span class="st">'Tb427.BES40.22'</span>]</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>protein_colors<span class="op">=</span>[<span class="st">'b'</span>,<span class="st">'r'</span>]</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>protein_indices <span class="op">=</span> [<span class="st">'GFP.BLA'</span>,<span class="st">'Tb427.BES40.22'</span>,]</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> detection_limit_imputed_indices:</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="kw">not</span> <span class="kw">in</span> protein_indices:</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>        protein_indices.append(n)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>        protein_names.append(<span class="st">''</span>)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>        protein_colors.append(<span class="st">'y'</span>)</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> iterative_imputer_imputed_indices:</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="kw">not</span> <span class="kw">in</span> protein_indices:</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>        protein_indices.append(n)</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>        protein_names.append(<span class="st">''</span>)</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>        protein_colors.append(<span class="st">'c'</span>)        </span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>plot_volcano_ma(results, <span class="st">"comparison WT 113"</span>, </span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>                protein_indices<span class="op">=</span>protein_indices, </span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>                protein_names<span class="op">=</span>protein_names, protein_colors<span class="op">=</span>protein_colors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-26-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-26-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-33" class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#filtered_quantification.head()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/mtinti/nbdev-proteomics/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
